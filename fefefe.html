@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор — Лабораторна робота №9</title>
+</head>
+<body>
+    <h1>Веб-калькулятор</h1>
+
+    <div>
+        <label for="num1">Перше число:</label>
+        <input type="text" id="num1" placeholder="Введіть перше число">
+    </div>
+    <br>
+    <div>
+        <label for="num2">Друге число:</label>
+        <input type="text" id="num2" placeholder="Введіть друге число">
+    </div>
+    <br>
+
+    <div>
+        <button type="button" id="btn-add">Додати (+)</button>
+        <button type="button" id="btn-sub">Відняти (-)</button>
+        <button type="button" id="btn-mul">Помножити (*)</button>
+        <button type="button" id="btn-div">Поділити (/)</button>
+        <button type="button" id="btn-clear">Очистити</button>
+    </div>
+
+    <h2>Результат: <span id="result">—</span></h2>
+    <p id="error" style="color: red;"></p>
+
+    <script>
+        const num1Input = document.getElementById("num1");
+        const num2Input = document.getElementById("num2");
+        const resultSpan = document.getElementById("result");
+        const errorParagraph = document.getElementById("error");
+
+        function parseNumbers() {
+            errorParagraph.textContent = "";
+            const raw1 = num1Input.value.trim().replace(",", ".");
+            const raw2 = num2Input.value.trim().replace(",", ".");
+
+            if (raw1 === "" || raw2 === "") {
+                errorParagraph.textContent = "Помилка: заповніть обидва поля введення.";
+                return null;
+            }
+
+            const a = Number(raw1);
+            const b = Number(raw2);
+
+            if (Number.isNaN(a) || Number.isNaN(b)) {
+                errorParagraph.textContent = "Помилка: введіть коректні числові значення.";
+                return null;
+            }
+
+            return { a, b };
+        }
+
+        document.getElementById("btn-add").addEventListener("click", () => {
+            const values = parseNumbers();
+            if (values) {
+                resultSpan.textContent = values.a + values.b;
+            }
+        });
+
+        document.getElementById("btn-sub").addEventListener("click", () => {
+            const values = parseNumbers();
+            if (values) {
+                resultSpan.textContent = values.a - values.b;
+            }
+        });
+
+        document.getElementById("btn-mul").addEventListener("click", () => {
+            const values = parseNumbers();
+            if (values) {
+                resultSpan.textContent = values.a * values.b;
+            }
+        });
+
+        document.getElementById("btn-div").addEventListener("click", () => {
+            const values = parseNumbers();
+            if (values) {
+                if (values.b === 0) {
+                    resultSpan.textContent = "—";
+                    errorParagraph.textContent = "Помилка: ділення на нуль неможливе.";
+                } else {
+                    resultSpan.textContent = Number((values.a / values.b).toFixed(4));
+                }
+            }
+        });
+
+        document.getElementById("btn-clear").addEventListener("click", () => {
+            num1Input.value = "";
+            num2Input.value = "";
+            resultSpan.textContent = "—";
+            errorParagraph.textContent = "";
+        });
+    </script>
+</body>
+</html>
